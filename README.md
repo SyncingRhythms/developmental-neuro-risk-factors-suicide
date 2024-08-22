@@ -1,5 +1,5 @@
 # Associations of Early Life Adversity and Suicide Attempts in Adolescents: A Mediating Role for Reward-Related Activation in the Anterior Insula Cortex
 
-Using structural equation modeling (SEM) and multi-level data (survey and fMRI) from the Adolescent Brain and Cognitive Development (ABCD) study (N=9147), we formed latent constructs for harsh socioeconomic status (HSES an early life adversity factor; Time 1) and anterior insula cortex (AIC) reward-related activation (Monetary Incentive Delay (MID) anticipatory large reward vs neutral contrast coefficients; left and right hemisphere; Time 1) and we created a binary indicator for any suicide attempt (SA) during Time 3 or 5 (years 1 and 2), based on K-SADS.
+Using structural equation modeling (SEM) and multi-level data (survey and fMRI) from the Adolescent Brain and Cognitive Development (ABCD) study (N=9147), we formed latent constructs for harsh socioeconomic status (HSES an early life adversity factor; Time 1) and anterior insula cortex (AIC) reward-related activation (Monetary Incentive Delay (MID) anticipatory large reward vs neutral contrast coefficients; left and right hemisphere; Time 1) and we created a binary indicator for any suicide attempt (SA) during Time 3 or 5 (years 1 and 2), based on K-SADS. 
 
-Motivation, theory, and results are summarized in the abstract found within (Adversity_AIC_Suicide.pdf).
+Motivation, theory, and results are summarized in the abstract found within (Adversity_AIC_Suicide.pdf). 
