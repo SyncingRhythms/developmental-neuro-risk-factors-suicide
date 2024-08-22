@@ -1,0 +1,1018 @@
+Mplus VERSION 8.11 (Linux)
+MUTHEN & MUTHEN
+07/27/2024   1:34 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE: Your title goes here
+  DATA: FILE = "ABCD_sui_7-26-24.dat";
+  VARIABLE:
+  NAMES = HSES1g subID HSES1c HSES1SQ HSES1CB NAL_lln1 NAR_lln1 AmygL_lln1 AmygR_lln1
+       HipcL_lln1 HipcR_lln1 ThalL_lln1 ThalR_lln1 eventname1 NAL_lrn1 NAR_lrn1
+       AmygL_lrn1 AmygR_lrn1 HipcL_lrn1 HipcR_lrn1 ThalL_lrn1 ThalR_lrn1 LtOrFrL_lln1
+       LtOrFrR_lln1 MedOrFrL_lln1 MedOrFrR_lln1 rACCL_lln1 rACCR_lln1 cACCL_lln1
+       cACCR_lln1 cACCL_lrn1 cACCR_lrn1 LtOrFrL_lrn1 LtOrFrR_lrn1 MedOrFrL_lrn1
+       MedOrFrR_lrn1 rACCL_lrn1 rACCR_lrn1 aInslL_lln1 aInslR_lln1 aInslL_lrn1
+       aInslR_lrn1 famID1 age1 income1 pedu1 spedu1 gender1 race1 prpensity1 LowEdu11
+       SingPH11 UnempR11 Motm1 imgincl_mid_include1 scanID1 NAL_lln5 NAR_lln5
+       AmygL_lln5 AmygR_lln5 HipcL_lln5 HipcR_lln5 ThalL_lln5 ThalR_lln5 eventname5
+       NAL_lrn5 NAR_lrn5 AmygL_lrn5 AmygR_lrn5 HipcL_lrn5 HipcR_lrn5 ThalL_lrn5
+       ThalR_lrn5 LtOrFrL_lln5 LtOrFrR_lln5 MedOrFrL_lln5 MedOrFrR_lln5 rACCL_lln5
+       rACCR_lln5 cACCL_lln5 cACCR_lln5 cACCL_lrn5 cACCR_lrn5 LtOrFrL_lrn5
+       LtOrFrR_lrn5 MedOrFrL_lrn5 MedOrFrR_lrn5 rACCL_lrn5 rACCR_lrn5 aInslL_lln5
+       aInslR_lln5 aInslL_lrn5 aInslR_lrn5 age5 Motm5 imgincl_mid_include5 scanID5
+       NAL_lln9 NAR_lln9 AmygL_lln9 AmygR_lln9 HipcL_lln9 HipcR_lln9 ThalL_lln9
+       ThalR_lln9 eventname9 NAL_lrn9 NAR_lrn9 AmygL_lrn9 AmygR_lrn9 HipcL_lrn9
+       HipcR_lrn9 ThalL_lrn9 ThalR_lrn9 LtOrFrL_lln9 LtOrFrR_lln9 MedOrFrL_lln9
+       MedOrFrR_lln9 rACCL_lln9 rACCR_lln9 cACCL_lln9 cACCR_lln9 cACCL_lrn9 cACCR_lrn9
+       LtOrFrL_lrn9 LtOrFrR_lrn9 MedOrFrL_lrn9 MedOrFrR_lrn9 rACCL_lrn9 rACCR_lrn9
+       aInslL_lln9 aInslR_lln9 aInslL_lrn9 aInslR_lrn9 age9 Motm9 imgincl_mid_include9
+       scanID9 SA_1 SA_3 SA_5 SA_3_5 SI_1 SI_3 SI_5 SI_3_5 Pedud1 FamDep1 IPR1
+       HSES1gSQ HSES1gCB SHSES1 SHSES1SQ SHSES1CB SPedud1 SFamDep1 SIPR1 SLowEdu1
+       SSingPH1 SUnempR1 IPR1r SIPR1r Spropense Spedu Sage Sincome Srace SMot1 SMot5
+       SMot9 SaInslL_lrn1 SaInslR_lrn1 SSA_3_5 aInsl_lrn1;
+  MISSING=.;
+
+
+
+  USEVARIABLES =
+  !SES Hardship indicators
+  SLowEdu1 SPedud1 SFamDep1 SUnempR1 SSingPH1 SIPR1R
+  !Mediator
+  SaInslL_lrn1 SaInslR_lrn1
+  !Suicide indicators
+  SA_3_5
+  !OTHER
+  gender1 Sage SMot1;
+
+  stratification = scanID1;
+  CLUSTER IS famID1;
+  WEIGHT = prpensity1;
+
+  Categorical are SA_3_5;
+
+  !grouping = gender1(1 = male, 2 = female);
+
+  ANALYSIS:
+  TYPE = COMPLEX;
+  ESTIMATOR = MLR;
+  !ESTIMATOR = WLSMV;
+  !TYPE = RANDOM;
+  !ALGORITHM=INTEGRATION;
+  !BOOTSTRAP = 1000;
+
+
+  MODEL:
+
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!!!!! MEASUREMENT MODEL !!!!!!!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  HSES BY
+  SLowEdu1@1
+  SPedud1
+  SFamDep1
+  SUnempR1
+  SSingPH1
+  SIPR1R;
+  ! Covariances
+  SIPR1R WITH SPEDUD1;
+  SSINGPH1 WITH SUNEMPR1;
+
+  AIC BY
+  SaInslL_lrn1
+  SaInslR_lrn1;
+
+
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!!!!!!!!!!!!! STRUCTURAL MODEL !!!!!!!!!!!!!!!!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  SA_3_5 ON HSES AIC gender1 Sage SMot1;
+
+  AIC ON HSES gender1 Sage SMot1;
+
+  MODEL INDIRECT:
+  SA_3_5 IND HSES;
+
+  OUTPUT: SAMPSTAT STAND cinterval (bcbootstrap) MODINDICES (3.00) TECH4;
+
+
+
+*** WARNING in VARIABLE command
+  Note that only the first 8 characters of variable names are used in the output.
+  Shorten variable names to avoid any confusion.
+*** WARNING
+  Clusters with the same IDs have been found in different strata.  These
+  clusters are assumed to be different because clusters are not allowed
+  to appear in more than one stratum.
+*** WARNING in OUTPUT command
+  MODINDICES option is not available for ALGORITHM=INTEGRATION.
+  Request for MODINDICES is ignored.
+*** WARNING in OUTPUT command
+  BOOTSTRAP and BCBOOTSTRAP confidence intervals require the specification
+  of BOOTSTRAP in the ANALYSIS command.  Request for CINTERVAL is ignored.
+   4 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Your title goes here
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        9147
+
+Number of dependent variables                                    9
+Number of independent variables                                  3
+Number of continuous latent variables                            2
+
+Observed dependent variables
+
+  Continuous
+   SLOWEDU1    SPEDUD1     SFAMDEP1    SUNEMPR1    SSINGPH1    SIPR1R
+   SAINSLL_LR  SAINSLR_LR
+
+  Binary and ordered categorical (ordinal)
+   SA_3_5
+
+Observed independent variables
+   GENDER1     SAGE        SMOT1
+
+Continuous latent variables
+   HSES        AIC
+
+Variables with special functions
+
+  Stratification        SCANID1
+  Cluster variable      FAMID1
+  Weight variable       PRPENSIT
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            2
+  Adaptive quadrature                                           ON
+Link                                                         LOGIT
+Cholesky                                                       OFF
+
+Input data file(s)
+  ABCD_sui_7-26-24.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             2
+     Number of y missing data patterns           2
+     Number of u missing data patterns           1
+     Number of strata                           29
+     Number of clusters                       7890
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              SLOWEDU1      SPEDUD1       SFAMDEP1      SUNEMPR1      SSINGPH1
+              ________      ________      ________      ________      ________
+ SLOWEDU1       0.947
+ SPEDUD1        0.947         1.000
+ SFAMDEP1       0.947         1.000         1.000
+ SUNEMPR1       0.947         0.947         0.947         0.947
+ SSINGPH1       0.947         0.947         0.947         0.947         0.947
+ SIPR1R         0.947         1.000         1.000         0.947         0.947
+ SAINSLL_       0.947         1.000         1.000         0.947         0.947
+ SAINSLR_       0.947         1.000         1.000         0.947         0.947
+ GENDER1        0.947         1.000         1.000         0.947         0.947
+ SAGE           0.947         1.000         1.000         0.947         0.947
+ SMOT1          0.947         1.000         1.000         0.947         0.947
+
+
+           Covariance Coverage
+              SIPR1R        SAINSLL_      SAINSLR_      GENDER1       SAGE
+              ________      ________      ________      ________      ________
+ SIPR1R         1.000
+ SAINSLL_       1.000         1.000
+ SAINSLR_       1.000         1.000         1.000
+ GENDER1        1.000         1.000         1.000         1.000
+ SAGE           1.000         1.000         1.000         1.000         1.000
+ SMOT1          1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              SMOT1
+              ________
+ SMOT1          1.000
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    SA_3_5
+      Category 1    0.978         8944.276
+      Category 2    0.022          202.724
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              SLOWEDU1      SPEDUD1       SFAMDEP1      SUNEMPR1      SSINGPH1
+              ________      ________      ________      ________      ________
+                0.059         0.139         0.091         0.057         0.074
+
+
+           Means
+              SIPR1R        SAINSLL_      SAINSLR_      GENDER1       SAGE
+              ________      ________      ________      ________      ________
+                0.229         0.001        -0.002         1.500         0.046
+
+
+           Means
+              SMOT1
+              ________
+                0.025
+
+
+           Covariances
+              SLOWEDU1      SPEDUD1       SFAMDEP1      SUNEMPR1      SSINGPH1
+              ________      ________      ________      ________      ________
+ SLOWEDU1       1.011
+ SPEDUD1        0.400         1.047
+ SFAMDEP1       0.121         0.324         1.172
+ SUNEMPR1       0.399         0.413         0.195         1.043
+ SSINGPH1       0.406         0.435         0.264         0.698         1.014
+ SIPR1R         0.287         0.562         0.347         0.340         0.392
+ SAINSLL_      -0.014        -0.015         0.006        -0.037        -0.030
+ SAINSLR_      -0.017        -0.031        -0.022        -0.042        -0.037
+ GENDER1        0.007         0.007        -0.011         0.019         0.015
+ SAGE          -0.018         0.006         0.001        -0.010        -0.013
+ SMOT1          0.031         0.144         0.093         0.124         0.105
+
+
+           Covariances
+              SIPR1R        SAINSLL_      SAINSLR_      GENDER1       SAGE
+              ________      ________      ________      ________      ________
+ SIPR1R         0.853
+ SAINSLL_      -0.012         1.016
+ SAINSLR_      -0.020         0.665         1.012
+ GENDER1        0.003         0.005         0.014         0.250
+ SAGE          -0.027         0.028         0.053        -0.021         1.002
+ SMOT1          0.105        -0.063        -0.052        -0.052        -0.101
+
+
+           Covariances
+              SMOT1
+              ________
+ SMOT1          1.053
+
+
+           Correlations
+              SLOWEDU1      SPEDUD1       SFAMDEP1      SUNEMPR1      SSINGPH1
+              ________      ________      ________      ________      ________
+ SLOWEDU1       1.000
+ SPEDUD1        0.389         1.000
+ SFAMDEP1       0.111         0.293         1.000
+ SUNEMPR1       0.388         0.395         0.176         1.000
+ SSINGPH1       0.401         0.422         0.242         0.679         1.000
+ SIPR1R         0.309         0.594         0.347         0.361         0.421
+ SAINSLL_      -0.014        -0.014         0.005        -0.036        -0.029
+ SAINSLR_      -0.017        -0.031        -0.020        -0.041        -0.037
+ GENDER1        0.014         0.014        -0.020         0.038         0.030
+ SAGE          -0.018         0.006         0.001        -0.010        -0.013
+ SMOT1          0.030         0.137         0.084         0.118         0.102
+
+
+           Correlations
+              SIPR1R        SAINSLL_      SAINSLR_      GENDER1       SAGE
+              ________      ________      ________      ________      ________
+ SIPR1R         1.000
+ SAINSLL_      -0.013         1.000
+ SAINSLR_      -0.022         0.656         1.000
+ GENDER1        0.006         0.010         0.028         1.000
+ SAGE          -0.029         0.028         0.053        -0.041         1.000
+ SMOT1          0.111        -0.061        -0.051        -0.101        -0.098
+
+
+           Correlations
+              SMOT1
+              ________
+ SMOT1          1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -124529.435
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     SLOWEDU1              0.056       2.765      -0.710    5.33%      -0.598     -0.454     -0.356
+            8663.000       1.009       9.612       7.465    0.01%      -0.230      0.306
+     SPEDUD1               0.139       0.478      -1.050   35.53%      -1.050     -0.177     -0.177
+            9147.000       1.047      -0.606       2.443    4.45%      -0.177      0.696
+     SFAMDEP1              0.091       2.611      -0.415   79.21%      -0.415     -0.415     -0.415
+            9147.000       1.172       7.185       6.008    0.26%      -0.415      0.503
+     SUNEMPR1              0.053       1.927      -1.523    0.01%      -0.744     -0.430     -0.252
+            8663.000       1.041       5.670       7.143    0.01%      -0.061      0.549
+     SSINGPH1              0.069       1.446      -1.412    0.17%      -0.778     -0.447     -0.288
+            8663.000       1.011       2.686       5.424    0.02%      -0.054      0.678
+     SIPR1R                0.229      -1.044      -4.298    0.04%      -0.781     -0.205      0.175
+            9147.000       0.853       0.913       2.270    0.01%       0.475      0.928
+     SAINSLL_LRN1          0.001       0.013      -7.063    0.01%      -0.713     -0.190      0.019
+            9147.000       1.016       5.259      12.879    0.01%       0.232      0.725
+     SAINSLR_LRN1         -0.002       0.036      -6.903    0.01%      -0.710     -0.209      0.007
+            9147.000       1.012       3.111       6.523    0.01%       0.222      0.727
+     GENDER1               1.500      -0.002       1.000   51.00%       1.000      1.000      1.000
+            9147.000       0.250      -2.000       2.000   49.00%       2.000      2.000
+     SAGE                  0.046      -0.053      -1.618    1.13%      -1.087     -0.289     -0.023
+            9147.000       1.002      -1.276       1.838    0.01%       0.376      1.041
+     SMOT1                 0.025       3.254      -0.890    0.01%      -0.622     -0.443     -0.326
+            9147.000       1.053      15.743      11.495    0.01%      -0.180      0.388
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       36
+
+Loglikelihood
+
+          H0 Value                      -93160.511
+          H0 Scaling Correction Factor      2.2832
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                  186393.022
+          Bayesian (BIC)                186649.385
+          Sample-Size Adjusted BIC      186534.983
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ HSES     BY
+    SLOWEDU1           1.000      0.000    999.000    999.000
+    SPEDUD1            1.255      0.050     24.965      0.000
+    SFAMDEP1           0.765      0.044     17.321      0.000
+    SUNEMPR1           1.098      0.038     29.228      0.000
+    SSINGPH1           1.199      0.040     29.655      0.000
+    SIPR1R             1.075      0.045     24.013      0.000
+
+ AIC      BY
+    SAINSLL_LR         1.000      0.000    999.000    999.000
+    SAINSLR_LR         1.385      0.319      4.343      0.000
+
+ AIC        ON
+    HSES              -0.050      0.018     -2.768      0.006
+
+ AIC        ON
+    GENDER1            0.037      0.017      2.158      0.031
+    SAGE               0.035      0.009      3.885      0.000
+    SMOT1             -0.029      0.022     -1.350      0.177
+
+ SA_3_5     ON
+    HSES               0.574      0.150      3.834      0.000
+    AIC               -0.260      0.125     -2.075      0.038
+
+ SA_3_5     ON
+    GENDER1            0.357      0.171      2.086      0.037
+    SAGE               0.304      0.082      3.702      0.000
+    SMOT1              0.106      0.074      1.433      0.152
+
+ SIPR1R   WITH
+    SPEDUD1            0.149      0.016      9.396      0.000
+
+ SSINGPH1 WITH
+    SUNEMPR1           0.297      0.024     12.553      0.000
+
+ Intercepts
+    SLOWEDU1           0.060      0.011      5.454      0.000
+    SPEDUD1            0.139      0.013     10.660      0.000
+    SFAMDEP1           0.091      0.015      6.098      0.000
+    SUNEMPR1           0.058      0.013      4.611      0.000
+    SSINGPH1           0.074      0.012      6.037      0.000
+    SIPR1R             0.229      0.011     21.771      0.000
+    SAINSLL_LR        -0.055      0.029     -1.934      0.053
+    SAINSLR_LR        -0.079      0.042     -1.875      0.061
+
+ Thresholds
+    SA_3_5$1           4.451      0.278     16.001      0.000
+
+ Variances
+    HSES               0.306      0.017     17.639      0.000
+
+ Residual Variances
+    SLOWEDU1           0.706      0.028     24.832      0.000
+    SPEDUD1            0.565      0.022     25.861      0.000
+    SFAMDEP1           0.993      0.044     22.348      0.000
+    SUNEMPR1           0.675      0.030     22.582      0.000
+    SSINGPH1           0.576      0.024     23.787      0.000
+    SIPR1R             0.499      0.017     28.917      0.000
+    SAINSLL_LR         0.536      0.114      4.715      0.000
+    SAINSLR_LR         0.092      0.212      0.432      0.665
+    AIC                0.476      0.110      4.335      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.313E-03
+       (ratio of smallest to largest eigenvalue)
+
+
+RESULTS IN PROBABILITY SCALE
+
+                    Estimate
+
+ SA_3_5
+    Category 1         0.978
+    Category 2         0.022
+
+
+LOGISTIC REGRESSION ODDS RATIO RESULTS
+
+                                                95% C.I.
+                    Estimate       S.E.  Lower 2.5% Upper 2.5%
+
+ SA_3_5     ON
+    HSES               1.775      0.266      1.324      2.380
+    AIC                0.771      0.097      0.603      0.986
+
+ SA_3_5     ON
+    GENDER1            1.429      0.244      1.022      1.998
+    SAGE               1.355      0.111      1.154      1.591
+    SMOT1              1.112      0.082      0.962      1.285
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ HSES     BY
+    SLOWEDU1           0.550      0.012     44.426      0.000
+    SPEDUD1            0.678      0.016     43.516      0.000
+    SFAMDEP1           0.391      0.014     27.124      0.000
+    SUNEMPR1           0.594      0.014     41.512      0.000
+    SSINGPH1           0.658      0.014     48.176      0.000
+    SIPR1R             0.644      0.014     47.159      0.000
+
+ AIC      BY
+    SAINSLL_LR         0.687      0.080      8.607      0.000
+    SAINSLR_LR         0.954      0.110      8.679      0.000
+
+ AIC        ON
+    HSES              -0.040      0.014     -2.852      0.004
+
+ AIC        ON
+    GENDER1            0.026      0.013      2.063      0.039
+    SAGE               0.051      0.012      4.219      0.000
+    SMOT1             -0.044      0.028     -1.530      0.126
+
+ SA_3_5     ON
+    HSES               0.169      0.042      3.982      0.000
+    AIC               -0.096      0.044     -2.150      0.032
+
+ SA_3_5     ON
+    GENDER1            0.095      0.045      2.101      0.036
+    SAGE               0.161      0.043      3.799      0.000
+    SMOT1              0.058      0.040      1.432      0.152
+
+ SIPR1R   WITH
+    SPEDUD1            0.280      0.022     12.611      0.000
+
+ SSINGPH1 WITH
+    SUNEMPR1           0.476      0.022     21.973      0.000
+
+ Intercepts
+    SLOWEDU1           0.060      0.010      5.863      0.000
+    SPEDUD1            0.136      0.012     11.012      0.000
+    SFAMDEP1           0.084      0.012      6.861      0.000
+    SUNEMPR1           0.057      0.012      4.853      0.000
+    SSINGPH1           0.074      0.012      6.334      0.000
+    SIPR1R             0.248      0.013     19.577      0.000
+    SAINSLL_LR        -0.055      0.028     -1.934      0.053
+    SAINSLR_LR        -0.079      0.042     -1.878      0.060
+
+ Thresholds
+    SA_3_5$1           2.365      0.140     16.949      0.000
+
+ Variances
+    HSES               1.000      0.000    999.000    999.000
+
+ Residual Variances
+    SLOWEDU1           0.698      0.014     51.220      0.000
+    SPEDUD1            0.540      0.021     25.527      0.000
+    SFAMDEP1           0.847      0.011     75.283      0.000
+    SUNEMPR1           0.647      0.017     37.983      0.000
+    SSINGPH1           0.567      0.018     31.541      0.000
+    SIPR1R             0.585      0.018     33.278      0.000
+    SAINSLL_LR         0.528      0.110      4.806      0.000
+    SAINSLR_LR         0.091      0.210      0.432      0.665
+    AIC                0.993      0.003    337.472      0.000
+
+
+STDY Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ HSES     BY
+    SLOWEDU1           0.550      0.012     44.426      0.000
+    SPEDUD1            0.678      0.016     43.516      0.000
+    SFAMDEP1           0.391      0.014     27.124      0.000
+    SUNEMPR1           0.594      0.014     41.512      0.000
+    SSINGPH1           0.658      0.014     48.176      0.000
+    SIPR1R             0.644      0.014     47.159      0.000
+
+ AIC      BY
+    SAINSLL_LR         0.687      0.080      8.607      0.000
+    SAINSLR_LR         0.954      0.110      8.679      0.000
+
+ AIC        ON
+    HSES              -0.040      0.014     -2.852      0.004
+
+ AIC        ON
+    GENDER1            0.053      0.026      2.063      0.039
+    SAGE               0.051      0.012      4.221      0.000
+    SMOT1             -0.042      0.028     -1.530      0.126
+
+ SA_3_5     ON
+    HSES               0.169      0.042      3.982      0.000
+    AIC               -0.096      0.044     -2.150      0.032
+
+ SA_3_5     ON
+    GENDER1            0.190      0.090      2.101      0.036
+    SAGE               0.161      0.042      3.800      0.000
+    SMOT1              0.056      0.039      1.432      0.152
+
+ SIPR1R   WITH
+    SPEDUD1            0.280      0.022     12.611      0.000
+
+ SSINGPH1 WITH
+    SUNEMPR1           0.476      0.022     21.973      0.000
+
+ Intercepts
+    SLOWEDU1           0.060      0.010      5.863      0.000
+    SPEDUD1            0.136      0.012     11.012      0.000
+    SFAMDEP1           0.084      0.012      6.861      0.000
+    SUNEMPR1           0.057      0.012      4.853      0.000
+    SSINGPH1           0.074      0.012      6.334      0.000
+    SIPR1R             0.248      0.013     19.577      0.000
+    SAINSLL_LR        -0.055      0.028     -1.934      0.053
+    SAINSLR_LR        -0.079      0.042     -1.878      0.060
+
+ Thresholds
+    SA_3_5$1           2.365      0.140     16.949      0.000
+
+ Variances
+    HSES               1.000      0.000    999.000    999.000
+
+ Residual Variances
+    SLOWEDU1           0.698      0.014     51.220      0.000
+    SPEDUD1            0.540      0.021     25.527      0.000
+    SFAMDEP1           0.847      0.011     75.283      0.000
+    SUNEMPR1           0.647      0.017     37.983      0.000
+    SSINGPH1           0.567      0.018     31.541      0.000
+    SIPR1R             0.585      0.018     33.278      0.000
+    SAINSLL_LR         0.528      0.110      4.806      0.000
+    SAINSLR_LR         0.091      0.210      0.432      0.665
+    AIC                0.993      0.003    337.472      0.000
+
+
+STD Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ HSES     BY
+    SLOWEDU1           0.553      0.016     35.278      0.000
+    SPEDUD1            0.694      0.018     38.550      0.000
+    SFAMDEP1           0.423      0.018     22.980      0.000
+    SUNEMPR1           0.607      0.017     36.741      0.000
+    SSINGPH1           0.663      0.016     42.536      0.000
+    SIPR1R             0.595      0.014     42.996      0.000
+
+ AIC      BY
+    SAINSLL_LR         0.693      0.080      8.607      0.000
+    SAINSLR_LR         0.959      0.111      8.614      0.000
+
+ AIC        ON
+    HSES              -0.040      0.014     -2.852      0.004
+
+ AIC        ON
+    GENDER1            0.053      0.026      2.063      0.039
+    SAGE               0.051      0.012      4.221      0.000
+    SMOT1             -0.042      0.028     -1.530      0.126
+
+ SA_3_5     ON
+    HSES               0.317      0.082      3.889      0.000
+    AIC               -0.180      0.084     -2.141      0.032
+
+ SA_3_5     ON
+    GENDER1            0.357      0.171      2.086      0.037
+    SAGE               0.304      0.082      3.702      0.000
+    SMOT1              0.106      0.074      1.433      0.152
+
+ SIPR1R   WITH
+    SPEDUD1            0.149      0.016      9.396      0.000
+
+ SSINGPH1 WITH
+    SUNEMPR1           0.297      0.024     12.553      0.000
+
+ Intercepts
+    SLOWEDU1           0.060      0.011      5.454      0.000
+    SPEDUD1            0.139      0.013     10.660      0.000
+    SFAMDEP1           0.091      0.015      6.098      0.000
+    SUNEMPR1           0.058      0.013      4.611      0.000
+    SSINGPH1           0.074      0.012      6.037      0.000
+    SIPR1R             0.229      0.011     21.771      0.000
+    SAINSLL_LR        -0.055      0.029     -1.934      0.053
+    SAINSLR_LR        -0.079      0.042     -1.875      0.061
+
+ Thresholds
+    SA_3_5$1           4.451      0.278     16.001      0.000
+
+ Variances
+    HSES               1.000      0.000    999.000    999.000
+
+ Residual Variances
+    SLOWEDU1           0.706      0.028     24.832      0.000
+    SPEDUD1            0.565      0.022     25.861      0.000
+    SFAMDEP1           0.993      0.044     22.348      0.000
+    SUNEMPR1           0.675      0.030     22.582      0.000
+    SSINGPH1           0.576      0.024     23.787      0.000
+    SIPR1R             0.499      0.017     28.917      0.000
+    SAINSLL_LR         0.536      0.114      4.715      0.000
+    SAINSLR_LR         0.092      0.212      0.432      0.665
+    AIC                0.993      0.003    337.472      0.000
+
+
+R-SQUARE
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    SA_3_5             0.071      0.020      3.615      0.000
+    SLOWEDU1           0.302      0.014     22.213      0.000
+    SPEDUD1            0.460      0.021     21.758      0.000
+    SFAMDEP1           0.153      0.011     13.562      0.000
+    SUNEMPR1           0.353      0.017     20.756      0.000
+    SSINGPH1           0.433      0.018     24.088      0.000
+    SIPR1R             0.415      0.018     23.580      0.000
+    SAINSLL_           0.472      0.110      4.304      0.000
+    SAINSLR_           0.909      0.210      4.339      0.000
+
+     Latent                                         Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    AIC                0.007      0.003      2.492      0.013
+
+
+TOTAL, TOTAL INDIRECT, SPECIFIC INDIRECT, AND DIRECT EFFECTS
+
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Effects from HSES to SA_3_5
+
+  Total                0.587      0.148      3.962      0.000
+  Total indirect       0.013      0.008      1.695      0.090
+
+  Specific indirect 1
+    SA_3_5
+    AIC
+    HSES               0.013      0.008      1.695      0.090
+
+  Direct
+    SA_3_5
+    HSES               0.574      0.150      3.834      0.000
+
+
+
+STANDARDIZED TOTAL, TOTAL INDIRECT, SPECIFIC INDIRECT, AND DIRECT EFFECTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Effects from HSES to SA_3_5
+
+  Total                0.172      0.042      4.125      0.000
+  Total indirect       0.004      0.002      1.701      0.089
+
+  Specific indirect 1
+    SA_3_5
+    AIC
+    HSES               0.004      0.002      1.701      0.089
+
+  Direct
+    SA_3_5
+    HSES               0.169      0.042      3.982      0.000
+
+
+
+STDY Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Effects from HSES to SA_3_5
+
+  Total                0.172      0.042      4.125      0.000
+  Total indirect       0.004      0.002      1.701      0.089
+
+  Specific indirect 1
+    SA_3_5
+    AIC
+    HSES               0.004      0.002      1.701      0.089
+
+  Direct
+    SA_3_5
+    HSES               0.169      0.042      3.982      0.000
+
+
+
+STD Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Effects from HSES to SA_3_5
+
+  Total                0.325      0.081      4.023      0.000
+  Total indirect       0.007      0.004      1.697      0.090
+
+  Specific indirect 1
+    SA_3_5
+    AIC
+    HSES               0.007      0.004      1.697      0.090
+
+  Direct
+    SA_3_5
+    HSES               0.317      0.082      3.889      0.000
+
+
+
+
+TECHNICAL 4 OUTPUT
+
+
+     ESTIMATES DERIVED FROM THE MODEL
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              HSES          AIC           SA_3_5        GENDER1       SAGE
+              ________      ________      ________      ________      ________
+                0.000         0.056         0.537         1.500         0.046
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              SMOT1
+              ________
+                0.025
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              HSES          AIC           SA_3_5        GENDER1       SAGE
+              ________      ________      ________      ________      ________
+                0.000         0.026         0.256         0.005         0.010
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              SMOT1
+              ________
+                0.011
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              HSES          AIC           SA_3_5        GENDER1       SAGE
+              ________      ________      ________      ________      ________
+                0.000         2.186         2.099       287.008         4.359
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              SMOT1
+              ________
+                2.347
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              HSES          AIC           SA_3_5        GENDER1       SAGE
+              ________      ________      ________      ________      ________
+                1.000         0.029         0.036         0.000         0.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              SMOT1
+              ________
+                0.019
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              HSES          AIC           SA_3_5        GENDER1       SAGE
+              ________      ________      ________      ________      ________
+ HSES           0.306
+ AIC           -0.015         0.480
+ SA_3_5         0.180        -0.122         3.543
+ GENDER1        0.000         0.010         0.075         0.250
+ SAGE           0.000         0.037         0.277        -0.021         1.002
+ SMOT1          0.000        -0.036         0.072        -0.052        -0.101
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              SMOT1
+              ________
+ SMOT1          1.053
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              HSES          AIC           SA_3_5        GENDER1       SAGE
+              ________      ________      ________      ________      ________
+ HSES           0.017
+ AIC            0.006         0.111
+ SA_3_5         0.045         0.060         0.075
+ GENDER1        0.000         0.004         0.042         0.004
+ SAGE           0.000         0.010         0.083         0.005         0.015
+ SMOT1          0.000         0.023         0.077         0.005         0.011
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              SMOT1
+              ________
+ SMOT1          0.016
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              HSES          AIC           SA_3_5        GENDER1       SAGE
+              ________      ________      ________      ________      ________
+ HSES          17.639
+ AIC           -2.766         4.303
+ SA_3_5         4.032        -2.051        47.012
+ GENDER1        0.000         2.333         1.774        67.628
+ SAGE           0.000         3.806         3.330        -3.934        67.628
+ SMOT1          0.000        -1.577         0.932        -9.638        -9.319
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              SMOT1
+              ________
+ SMOT1         67.628
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              HSES          AIC           SA_3_5        GENDER1       SAGE
+              ________      ________      ________      ________      ________
+ HSES           0.000
+ AIC            0.006         0.000
+ SA_3_5         0.000         0.040         0.000
+ GENDER1        1.000         0.020         0.076         0.000
+ SAGE           1.000         0.000         0.001         0.000         0.000
+ SMOT1          1.000         0.115         0.351         0.000         0.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              SMOT1
+              ________
+ SMOT1          0.000
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              HSES          AIC           SA_3_5        GENDER1       SAGE
+              ________      ________      ________      ________      ________
+ HSES           1.000
+ AIC           -0.040         1.000
+ SA_3_5         0.172        -0.094         1.000
+ GENDER1        0.000         0.029         0.080         1.000
+ SAGE           0.000         0.054         0.147        -0.041         1.000
+ SMOT1          0.000        -0.051         0.037        -0.101        -0.098
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              SMOT1
+              ________
+ SMOT1          1.000
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              HSES          AIC           SA_3_5        GENDER1       SAGE
+              ________      ________      ________      ________      ________
+ HSES           0.000
+ AIC            0.014         0.000
+ SA_3_5         0.042         0.044         0.000
+ GENDER1        0.000         0.012         0.045         0.000
+ SAGE           0.000         0.012         0.043         0.010         0.000
+ SMOT1          0.000         0.028         0.040         0.010         0.010
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              SMOT1
+              ________
+ SMOT1          0.000
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              HSES          AIC           SA_3_5        GENDER1       SAGE
+              ________      ________      ________      ________      ________
+ HSES         999.000
+ AIC           -2.852       999.000
+ SA_3_5         4.125        -2.126       999.000
+ GENDER1        0.000         2.329         1.784       999.000
+ SAGE           0.000         4.503         3.409        -3.944       999.000
+ SMOT1          0.000        -1.830         0.931        -9.788        -9.454
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              SMOT1
+              ________
+ SMOT1        999.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              HSES          AIC           SA_3_5        GENDER1       SAGE
+              ________      ________      ________      ________      ________
+ HSES           0.000
+ AIC            0.004         0.000
+ SA_3_5         0.000         0.034         0.000
+ GENDER1        1.000         0.020         0.074         0.000
+ SAGE           1.000         0.000         0.001         0.000         0.000
+ SMOT1          1.000         0.067         0.352         0.000         0.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              SMOT1
+              ________
+ SMOT1          0.000
+
+
+     Beginning Time:  13:34:11
+        Ending Time:  13:34:58
+       Elapsed Time:  00:00:47
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2024 Muthen & Muthen
